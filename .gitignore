@@ -139,7 +139,5 @@ dmypy.json
 cython_debug/
 
 data
-node_modules
+docker-compose.app.yaml
 .idea
-front/.env.development
-.env.production

@@ -1,7 +1,10 @@
-.PHONY: lint test infra install-deps
+.PHONY: lint test infra install-deps isort
 
 lint:
 	poetry run flake8 app/
+
+isort:
+	poetry run isort app/
 
 test:
 	poetry run pytest app/

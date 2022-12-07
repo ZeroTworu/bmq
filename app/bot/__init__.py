@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
-from app.config.types import BotType, BOT_TYPE
+
+from app.config.types import BOT_TYPE, BotType
+
 from .tg.tg_bot import TgMqBot
 
 if TYPE_CHECKING:

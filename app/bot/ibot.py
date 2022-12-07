@@ -8,6 +8,9 @@ class DtoMessage:
     uid: int
     message: str
 
+    def __str__(self):
+        return f'[(uid={self.uid}) (message={self.message})]'
+
 
 Callback = Callable[[DtoMessage], Awaitable]
 
@@ -19,7 +22,7 @@ class IBot(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    async def reply(self, message: str):
+    async def reply(self, message: 'DtoMessage'):
         pass
 
     @abstractmethod

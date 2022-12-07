@@ -1,5 +1,5 @@
-from os import getenv
 from enum import Enum
+from os import getenv
 
 
 class BotType(Enum):

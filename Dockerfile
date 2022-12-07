@@ -1,20 +1,16 @@
 FROM python:3.10
 
-RUN mkdir /hex
-WORKDIR /hex
+RUN mkdir /bot
+WORKDIR /bot
 
-ADD alembic.ini /hex/
-ADD migrations /hex/migrations/
-
-ADD poetry.lock /hex/
-ADD pyproject.toml /hex/
+ADD poetry.lock /bot
+ADD pyproject.toml /bot
 
 RUN pip3 install --upgrade pip
 RUN pip3 install poetry
 RUN poetry install --no-dev
 
 
-ADD app /hex/app/
+ADD app /bot/app
 
-CMD ["poetry", "run", "python", "-m", "app", "web"]
-EXPOSE 5000
+CMD ["poetry", "run", "python", "-m", "app"]
