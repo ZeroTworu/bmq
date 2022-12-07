@@ -30,7 +30,7 @@ class Manager:
     _logger: 'Logger' = None
     _mode: 'AppMode' = None
     _working: bool = False
-    _signals = {}
+    _amqp_wait_timeout: int = 5
 
     def __init__(self, mode: 'AppMode'):
         self._logger = get_logger('manage')
@@ -40,22 +40,21 @@ class Manager:
 
         self._bot = get_bot()
         self._compressor = get_compressor()
-        self._signals = {
-            k: v for v, k in signal.__dict__.items()
-            if v.startswith("SIG") and not v.startswith("SIG_")
-        }
 
         for s in (SIGINT, SIGTERM, SIGABRT):
             signal_fn(s, self.stop)
 
     def stop(self, signum, __):
-        self._logger.info('Stop signal received (%s). Exiting...', self._signals[signum])
+        signal_name = {
+            k: v for v, k in signal.__dict__.items()
+            if v.startswith("SIG") and not v.startswith("SIG_")
+        }[signum]
+
+        self._logger.info('Stop signal received (%s). Exiting...', signal_name)
         self._working = False
 
     async def run(self):
-        self._rmq_conn = await aio_pika.connect_robust(RMQ_DSN)
-        self._logger.info('RMQ connect to %s', censor_amqp(RMQ_DSN))
-
+        await self._create_amqp_connection()
         self._working = True
 
         match self._mode:
@@ -113,3 +112,12 @@ class Manager:
 
         await self._rmq_conn.close()
         await self._bot.destroy()
+
+    async def _create_amqp_connection(self):
+        try:
+            self._rmq_conn = await aio_pika.connect_robust(RMQ_DSN)
+            self._logger.info('RMQ connect to %s', censor_amqp(RMQ_DSN))
+        except ConnectionError:
+            self._logger.warning('Cannot connect to RMQ, wait %ss...', self._amqp_wait_timeout)
+            await asyncio.sleep(self._amqp_wait_timeout)
+            await self._create_amqp_connection()
