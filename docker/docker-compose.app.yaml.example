@@ -16,9 +16,19 @@ services:
       - rabbit
     environment:
       BMQ_APP_MODE: 'receiver'
+      BMQ_BOT_TYPE: 'tg'
+      BMQ_RMQ_DSN: 'amqp://user:password@rabbit/'
+      BMQ_TG_API_HASH: '***'
+      BMQ_TG_API_ID: '***'
+      BMQ_TG_BOT_TOKEN: '***'
   replayer:
     image: mq_bot:latest
     depends_on:
       - rabbit
     environment:
       BMQ_APP_MODE: 'replayer'
+      BMQ_BOT_TYPE: 'tg'
+      BMQ_RMQ_DSN: 'amqp://user:password@rabbit/'
+      BMQ_TG_API_HASH: '***'
+      BMQ_TG_API_ID: '***'
+      BMQ_TG_BOT_TOKEN: '***'

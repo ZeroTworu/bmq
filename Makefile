@@ -1,4 +1,4 @@
-.PHONY: lint test infra install-deps isort
+.PHONY: lint test infra install-deps isort app local
 
 lint:
 	poetry run flake8 app/
@@ -15,6 +15,9 @@ infra:
 app:
 	docker build . -t mq_bot:latest
 	docker-compose -f docker/docker-compose.app.yaml up --remove-orphans
+
+local:
+	poetry run python -m app
 
 install-deps:
 	pip3 install --upgrade pip

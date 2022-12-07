@@ -49,6 +49,10 @@ class TgMqBot(IBot, Client):
         await self._callback(dto_message)
 
     async def reply(self, message: 'DtoMessage'):
+        # Prevent self reply
+        if message.uid == self.me.id:
+            return
+
         self._logger.debug('reply to "%s" with text "%s"', message.uid, message.message)
         await self.send_message(message.uid, message.message)
 
