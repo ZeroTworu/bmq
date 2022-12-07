@@ -4,6 +4,7 @@ from pyrogram import Client
 from pyrogram.handlers import MessageHandler
 
 from app.bot.ibot import DtoMessage, IBot
+from app.bot.tg.filters import filter_not_bot
 from app.config.tg import TG_API_HASH, TG_API_ID, TG_BOT_TOKEN
 from app.logger import get_logger
 
@@ -34,7 +35,7 @@ class TgMqBot(IBot, Client):
 
     def register_message_callback(self, cb: 'Callback'):
         self._callback = cb
-        self.add_handler(MessageHandler(self._pre_receive))
+        self.add_handler(MessageHandler(self._pre_receive, filters=filter_not_bot))
         self._logger.debug('Registered callback %s', cb)
 
     async def _pre_receive(self, _, message: 'Message'):
@@ -49,10 +50,6 @@ class TgMqBot(IBot, Client):
         await self._callback(dto_message)
 
     async def reply(self, message: 'DtoMessage'):
-        # Prevent self reply
-        if message.uid == self.me.id:
-            return
-
         self._logger.debug('Reply to "%s" with text "%s"', message.uid, message.message)
         await self.send_message(message.uid, message.message)
 
