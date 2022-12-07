@@ -58,7 +58,7 @@ class TgMqBot(IBot, Client):
 
     async def init(self):
         await self.start()
-        self._logger.info('Rogin as: "%s"', self.me.username)
+        self._logger.info('Login as: "%s"', self.me.username)
 
     async def destroy(self):
         await self.stop()
