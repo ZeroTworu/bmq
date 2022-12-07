@@ -53,3 +53,5 @@ Echo bot for Telegram.
 ### Запуск линтера
 `make lint`
 
+### Генерация `proto` файлов
+`make proto`

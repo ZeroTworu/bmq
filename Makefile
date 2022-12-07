@@ -1,4 +1,4 @@
-.PHONY: lint test infra install-deps isort app local
+.PHONY: lint test infra install-deps isort app local proto
 
 lint:
 	poetry run flake8 app/
@@ -23,3 +23,6 @@ install-deps:
 	pip3 install --upgrade pip
 	pip3 install poetry
 	poetry install
+
+proto:
+	protoc -I=. --python_out=./app/compress/protobuf ./proto/message.proto
