@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package bmq;
+
+message Message {
+  uint64 uid = 1;
+  string message = 2;
+}

@@ -8,7 +8,7 @@ class BotType(Enum):
 
 class CompressorType(Enum):
     GZIP = 'gzip'
-    # TODO: protobuf
+    PROTOBUF = 'protobuf'
 
 
 class AppMode(Enum):
@@ -20,4 +20,4 @@ BOT_TYPE = BotType(getenv('BMQ_BOT_TYPE', 'tg').lower())
 
 APP_MODE = AppMode(getenv('BMQ_APP_MODE', 'receiver').upper())
 
-COMPRESSOR_TYPE = CompressorType(getenv('BMQ_COMPRESSOR_TYPE', 'gzip'))
+COMPRESSOR_TYPE = CompressorType(getenv('BMQ_COMPRESSOR_TYPE', 'protobuf'))

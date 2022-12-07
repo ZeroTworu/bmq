@@ -1,15 +1,16 @@
 import asyncio
+import signal
+from signal import SIGABRT, SIGINT, SIGTERM, signal as signal_fn
 from typing import TYPE_CHECKING
 
 import aio_pika
-import signal
-from signal import signal as signal_fn, SIGINT, SIGTERM, SIGABRT
+
 from app.bot import get_bot
 from app.compress import get_compressor
+from app.config.idle import IDLE_TIMEOUT
 from app.config.rmq import RMQ_DSN, RMQ_QUEUE, RMQ_ROUTING_KEY
 from app.config.types import AppMode
 from app.logger import censor_amqp, get_logger
-from app.config.idle import IDLE_TIMEOUT
 
 if TYPE_CHECKING:
     from logging import Logger
@@ -19,7 +20,6 @@ if TYPE_CHECKING:
 
     from app.bot.ibot import DtoMessage, IBot
     from app.compress.icompress import ICompressor
-    from typing import Dict
 
 
 class Manager:

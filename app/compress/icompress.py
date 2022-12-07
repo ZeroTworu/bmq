@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod
+from typing import TYPE_CHECKING
 
-from app.bot.ibot import DtoMessage
+if TYPE_CHECKING:
+    from app.bot.ibot import DtoMessage
 
 
 class ICompressor(metaclass=ABCMeta):
