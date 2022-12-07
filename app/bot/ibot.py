@@ -28,3 +28,7 @@ class IBot(metaclass=ABCMeta):
     @abstractmethod
     async def init(self):
         pass
+
+    @abstractmethod
+    async def destroy(self):
+        pass

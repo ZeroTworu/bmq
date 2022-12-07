@@ -35,11 +35,11 @@ class TgMqBot(IBot, Client):
     def register_message_callback(self, cb: 'Callback'):
         self._callback = cb
         self.add_handler(MessageHandler(self._pre_receive))
-        self._logger.debug('registered callback %s', cb)
+        self._logger.debug('Registered callback %s', cb)
 
     async def _pre_receive(self, _, message: 'Message'):
         self._logger.debug(
-            'receive message "%s" from "%s" (%s)',
+            'Receive message "%s" from "%s" (%s)',
             message.text,
             message.from_user.id,
             message.from_user.username,
@@ -53,9 +53,12 @@ class TgMqBot(IBot, Client):
         if message.uid == self.me.id:
             return
 
-        self._logger.debug('reply to "%s" with text "%s"', message.uid, message.message)
+        self._logger.debug('Reply to "%s" with text "%s"', message.uid, message.message)
         await self.send_message(message.uid, message.message)
 
     async def init(self):
         await self.start()
-        self._logger.info('login as: "%s"', self.me.username)
+        self._logger.info('Rogin as: "%s"', self.me.username)
+
+    async def destroy(self):
+        await self.stop()
