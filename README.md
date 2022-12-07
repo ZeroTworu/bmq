@@ -45,10 +45,11 @@ Echo bot for Telegram.
 | BMQ_RMQ_ROUTING_KEY | RMQ routing key                                   | -        | `bmq `                            |
 | BMQ_RMQ_QUEUE       | Очередь сообщений                                 | -        | `bmq `                            |
 | BMQ_BOT_TYPE        | Тип используемого бота, пока только Telegram      | -        | `tg `                             |
-| BMQ_APP_MODE        | Режим работы приложения `receiver` или `replayer` | -        | receiver                          |
+| BMQ_APP_MODE        | Режим работы приложения `receiver` или `replayer` | -        | `receiver `                       |
 | BMQ_COMPRESSOR_TYPE | Тип сжатия сообщений, `gzip` или `protobuf`       | -        | `protobuf`                        |
 | BMQ_IDLE_TIMEOUT    | Время простоя главного цикла в секундах           | -        | `1 `                              |
 | BMQ_LOG_LEVEL       | Уровень логирования                               | -        | `INFO `                           |
 
-
+### Запуск линтера
+`make lint`
 
