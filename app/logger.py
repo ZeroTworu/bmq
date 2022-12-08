@@ -14,4 +14,4 @@ def get_logger(name: str):
 
 
 def censor_amqp(dsn: str) -> str:
-    return re.sub(':[A-z0-9]+@', '@***:', dsn)
+    return re.sub(':[A-z0-9]+@', '@********:', dsn)

@@ -15,7 +15,7 @@ from app.logger import censor_amqp, get_logger
 if TYPE_CHECKING:
     from logging import Logger
 
-    from aio_pika.message import AbstractMessage
+    from aio_pika.message import AbstractIncomingMessage
     from aio_pika.robust_connection import AbstractRobustConnection
 
     from app.bot.ibot import DtoMessage, IBot
@@ -97,7 +97,7 @@ class Manager:
         self._logger.info('Replayer started')
         await self._idle()
 
-    async def _process_message(self, message: 'AbstractMessage'):
+    async def _process_message(self, message: 'AbstractIncomingMessage'):
         self._logger.debug('Receive message from RMQ %s', message)
 
         dto_message = await self._compressor.decompress(message.body)
@@ -105,6 +105,7 @@ class Manager:
         self._logger.info('Decoded message from RMQ %s', dto_message)
 
         await self._bot.reply(dto_message)
+        await message.ack()
 
     async def _idle(self):
         while self._working:
@@ -112,6 +113,7 @@ class Manager:
 
         await self._rmq_conn.close()
         await self._bot.destroy()
+        self._logger.info('Exit')
 
     async def _create_amqp_connection(self):
         try:
