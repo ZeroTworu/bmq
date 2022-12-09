@@ -1,6 +1,6 @@
 ### BMQ
 
-Echo bot microservice bot.
+Echo microservice bot.
 
 Состоит из двух сервисов: `receiver` и `replayer`, связь между сервисами осуществляется через RMQ.
 
