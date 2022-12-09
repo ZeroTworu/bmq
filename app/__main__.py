@@ -10,7 +10,7 @@ def run_app():
 
     manager = Manager(APP_MODE)
 
-    loop.run_until_complete(manager.run())
+    loop.run_until_complete(manager.start())
 
 
 if __name__ == '__main__':

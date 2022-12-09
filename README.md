@@ -1,6 +1,6 @@
 ### BMQ
 
-Echo bot for Telegram.
+Echo bot microservice bot.
 
 Состоит из двух сервисов: `receiver` и `replayer`, связь между сервисами осуществляется через RMQ.
 

@@ -49,14 +49,13 @@ class Manager:
             k: v for v, k in signal.__dict__.items()
             if v.startswith("SIG") and not v.startswith("SIG_")
         }[signum]
-
         self._logger.info('Stop signal received (%s). Exiting...', signal_name)
+
         self._working = False
 
-    async def run(self):
-        await self._create_amqp_connection()
+    async def start(self):
         self._working = True
-
+        await self._create_amqp_connection()
         match self._mode:
             case AppMode.RECEIVER:
                 await self.receiver()
