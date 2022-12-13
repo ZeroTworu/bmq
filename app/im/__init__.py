@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
 from app.config.types import BOT_TYPE_USED, BotType
-
 from app.im.jabber.jabber_bot import JabberBot
+
 from .tg.tg_bot import TelegramBot
 
 if TYPE_CHECKING:
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 def get_bots() -> 'Dict[BotType,IBot]':
-    result:'Dict[BotType,IBot]' = {}
+    result: 'Dict[BotType,IBot]' = {}
     types: 'List[str]' = BOT_TYPE_USED.split(',')
 
     for _type in types:

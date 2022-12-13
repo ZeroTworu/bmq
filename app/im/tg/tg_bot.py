@@ -5,9 +5,9 @@ from pyrogram.handlers import MessageHandler
 
 from app.config.tg import TG_API_HASH, TG_API_ID, TG_BOT_TOKEN
 from app.config.types import BotType
+from app.domain.logger import get_logger
 from app.im.ibot import DtoMessage, IBot
 from app.im.tg.filters import filter_not_bot
-from app.domain.logger import get_logger
 
 if TYPE_CHECKING:
     from logging import Logger
@@ -54,7 +54,7 @@ class TelegramBot(IBot, Client):
         self._logger.debug('Reply to "%s" with text "%s"', message.uid, message.message)
         await self.send_message(int(message.uid), message.message)
 
-    async def init(self):
+    async def build(self):
         await self.start()
         self._logger.info('Telegram login as: "%s"', self.me.username)
 

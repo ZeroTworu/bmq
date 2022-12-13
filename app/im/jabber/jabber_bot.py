@@ -8,8 +8,8 @@ from aioxmpp import (
 
 from app.config.jabber import JABBER_ID, JABBER_PASSWORD
 from app.config.types import BotType
-from app.im.ibot import DtoMessage, IBot
 from app.domain.logger import get_logger
+from app.im.ibot import DtoMessage, IBot
 
 if TYPE_CHECKING:
     from asyncio import AbstractEventLoop
@@ -57,7 +57,7 @@ class JabberBot(PresenceManagedClient, IBot):
         msg.body[None] = message.message
         await self.send(msg)
 
-    async def init(self):
+    async def build(self):
         self._loop = get_running_loop()
         self.start()
         self.set_presence(

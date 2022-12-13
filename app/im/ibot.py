@@ -31,7 +31,7 @@ class IBot(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    async def init(self):
+    async def build(self):
         pass
 
     @abstractmethod

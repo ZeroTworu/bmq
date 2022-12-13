@@ -9,10 +9,10 @@ from app.compress import get_compressor
 from app.config.idle import IDLE_TIMEOUT
 from app.config.rmq import RMQ_DSN
 from app.config.types import AppMode
-from app.domain.receiver import Receiver
-from app.domain.replayer import Replayer
-from app.im import get_bots
 from app.domain.logger import censor_amqp, get_logger
+from app.domain.services.receiver_service import ReceiverService
+from app.domain.services.replayer_service import ReplayerService
+from app.im import get_bots
 
 if TYPE_CHECKING:
     from logging import Logger
@@ -57,10 +57,10 @@ class Manager:
 
         match self._mode:
             case AppMode.RECEIVER:
-                receiver = Receiver(self._rmq_conn, self._bots, self._compressor)
+                receiver = ReceiverService(self._rmq_conn, self._bots, self._compressor, 'receiver')
                 await receiver.start()
             case AppMode.REPLAYER:
-                replayer = Replayer(self._rmq_conn, self._bots, self._compressor)
+                replayer = ReplayerService(self._rmq_conn, self._bots, self._compressor, 'replayer')
                 await replayer.start()
 
         await self._idle()
