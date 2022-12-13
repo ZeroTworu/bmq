@@ -33,7 +33,7 @@ class ReplayerService(IService):
 
         bot = self._bots.get(dto_message.bot_type)
         if bot is None:
-            self._logger.error('Bot "%s" not registered', message.routing_key)
+            self._logger.error('Bot "%s" not registered', bot_type_str)
             return
 
         await bot.reply(dto_message)
