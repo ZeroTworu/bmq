@@ -21,6 +21,8 @@ services:
       BMQ_TG_API_HASH: '***'
       BMQ_TG_API_ID: '***'
       BMQ_TG_BOT_TOKEN: '***'
+      BMQ_JABBER_ID: '***'
+      BMQ_JABBER_PASSWORD: '***'
   replayer:
     image: mq_bot:latest
     depends_on:
@@ -32,3 +34,5 @@ services:
       BMQ_TG_API_HASH: '***'
       BMQ_TG_API_ID: '***'
       BMQ_TG_BOT_TOKEN: '***'
+      BMQ_JABBER_ID: '***'
+      BMQ_JABBER_PASSWORD: '***'

@@ -51,7 +51,7 @@ class TgMqBot(IBot, Client):
 
     async def reply(self, message: 'DtoMessage'):
         self._logger.debug('Reply to "%s" with text "%s"', message.uid, message.message)
-        await self.send_message(message.uid, message.message)
+        await self.send_message(int(message.uid), message.message)
 
     async def init(self):
         await self.start()

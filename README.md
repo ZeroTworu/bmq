@@ -43,7 +43,7 @@ Echo microservice bot.
 | BMQ_TG_API_HASH     | Telegram API hash                                             | ~        |                                   |
 | BMQ_TG_BOT_TOKEN    | Telegram API token                                            | ~        |                                   |
 | BMQ_JABBER_ID       | Jabber UID                                                    | ~        |                                   |
-|BMQ_JABBER_PASSWORD  | Jabber password                                               | ~        |                                   |
+| BMQ_JABBER_PASSWORD | Jabber password                                               | ~        |                                   |
 | BMQ_RMQ_DSN         | Строка подключения к RMQ                                      | -        | `amqp://user:password@127.0.0.1/` |
 | BMQ_RMQ_ROUTING_KEY | RMQ routing key                                               | -        | `bmq `                            |
 | BMQ_RMQ_QUEUE       | Очередь сообщений                                             | -        | `bmq `                            |
