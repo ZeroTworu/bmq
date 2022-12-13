@@ -4,9 +4,10 @@ from pyrogram import Client
 from pyrogram.handlers import MessageHandler
 
 from app.config.tg import TG_API_HASH, TG_API_ID, TG_BOT_TOKEN
+from app.config.types import BotType
 from app.im.ibot import DtoMessage, IBot
 from app.im.tg.filters import filter_not_bot
-from app.logger import get_logger
+from app.domain.logger import get_logger
 
 if TYPE_CHECKING:
     from logging import Logger
@@ -16,8 +17,8 @@ if TYPE_CHECKING:
     from app.im.ibot import Callback
 
 
-class TgMqBot(IBot, Client):
-
+class TelegramBot(IBot, Client):
+    _type: 'BotType' = BotType.TELEGRAM
     _callback: 'Callback' = None
     _logger: 'Logger' = None
 
@@ -46,7 +47,7 @@ class TgMqBot(IBot, Client):
             message.from_user.username,
         )
 
-        dto_message = DtoMessage(uid=str(message.from_user.id), message=message.text)
+        dto_message = DtoMessage(uid=str(message.from_user.id), message=message.text, bot_type=self._type)
         await self._callback(dto_message)
 
     async def reply(self, message: 'DtoMessage'):
@@ -55,7 +56,8 @@ class TgMqBot(IBot, Client):
 
     async def init(self):
         await self.start()
-        self._logger.info('Login as: "%s"', self.me.username)
+        self._logger.info('Telegram login as: "%s"', self.me.username)
 
     async def destroy(self):
         await self.stop()
+        self._logger.info('Telegram bot destroyed')

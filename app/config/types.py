@@ -17,7 +17,7 @@ class AppMode(Enum):
     REPLAYER = 'REPLAYER'
 
 
-BOT_TYPE = BotType(getenv('BMQ_BOT_TYPE', 'tg').lower())
+BOT_TYPE_USED = getenv('BMQ_BOT_TYPE_USED', 'tg,jabber').lower()
 
 APP_MODE = AppMode(getenv('BMQ_APP_MODE', 'receiver').upper())
 

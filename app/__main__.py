@@ -1,7 +1,7 @@
 from asyncio import events
 
 from app.config.types import APP_MODE
-from app.manager import Manager
+from app.domain.manager import Manager
 
 
 def run_app():

@@ -7,24 +7,23 @@ import aio_pika
 
 from app.compress import get_compressor
 from app.config.idle import IDLE_TIMEOUT
-from app.config.rmq import RMQ_DSN, RMQ_QUEUE, RMQ_ROUTING_KEY
+from app.config.rmq import RMQ_DSN
 from app.config.types import AppMode
-from app.im import get_bot
-from app.logger import censor_amqp, get_logger
+from app.domain.receiver import Receiver
+from app.domain.replayer import Replayer
+from app.im import get_bots
+from app.domain.logger import censor_amqp, get_logger
 
 if TYPE_CHECKING:
     from logging import Logger
 
-    from aio_pika.message import AbstractIncomingMessage
     from aio_pika.robust_connection import AbstractRobustConnection
 
     from app.compress.icompress import ICompressor
-    from app.im.ibot import DtoMessage, IBot
 
 
 class Manager:
 
-    _bot: 'IBot' = None
     _rmq_conn: 'AbstractRobustConnection' = None
     _compressor: 'ICompressor' = None
     _logger: 'Logger' = None
@@ -34,11 +33,10 @@ class Manager:
 
     def __init__(self, mode: 'AppMode'):
         self._logger = get_logger('manage')
+        self._logger.info('Starting...')
+
         self._mode = mode
-
-        self._logger.info('init app in mode %s', mode)
-
-        self._bot = get_bot()
+        self._bots = get_bots()
         self._compressor = get_compressor()
 
         for s in (SIGINT, SIGTERM, SIGABRT):
@@ -56,62 +54,26 @@ class Manager:
     async def start(self):
         self._working = True
         await self._create_amqp_connection()
+
         match self._mode:
             case AppMode.RECEIVER:
-                await self.receiver()
+                receiver = Receiver(self._rmq_conn, self._bots, self._compressor)
+                await receiver.start()
             case AppMode.REPLAYER:
-                await self.replayer()
-
-    async def receiver(self):
-        self._logger.info('Starting receiver')
-
-        await self._bot.init()
-        self._bot.register_message_callback(self._message_callback)
-        self._logger.info('Receiver started')
+                replayer = Replayer(self._rmq_conn, self._bots, self._compressor)
+                await replayer.start()
 
         await self._idle()
-
-    async def _message_callback(self, message: 'DtoMessage'):
-        self._logger.info('Receive message from im "%s"', message)
-        compressed = await self._compressor.compress(message)
-
-        channel = await self._rmq_conn.channel()
-
-        await channel.default_exchange.publish(
-            aio_pika.Message(body=compressed),
-            routing_key=RMQ_ROUTING_KEY,
-        )
-        self._logger.info('Message %s published', message)
-
-    async def replayer(self):
-        self._logger.info('Starting replayer')
-
-        await self._bot.init()
-        channel = await self._rmq_conn.channel()
-        await channel.set_qos(prefetch_count=100)
-
-        queue = await channel.declare_queue(RMQ_QUEUE, auto_delete=True)
-        await queue.consume(self._process_message)
-
-        self._logger.info('Replayer started')
-        await self._idle()
-
-    async def _process_message(self, message: 'AbstractIncomingMessage'):
-        self._logger.debug('Receive message from RMQ %s', message)
-
-        dto_message = await self._compressor.decompress(message.body)
-
-        self._logger.info('Decoded message from RMQ %s', dto_message)
-
-        await self._bot.reply(dto_message)
-        await message.ack()
 
     async def _idle(self):
         while self._working:
             await asyncio.sleep(IDLE_TIMEOUT)
 
         await self._rmq_conn.close()
-        await self._bot.destroy()
+
+        for bot in self._bots.values():
+            await bot.destroy()
+
         self._logger.info('Exit')
 
     async def _create_amqp_connection(self):
