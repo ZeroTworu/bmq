@@ -35,20 +35,23 @@ Echo microservice bot.
 4. `make local` или `poetry run python -m app`.
 
 ### Описание переменных окружения
+* `~` - означает что переменная должна быть заполнена в зависимости от выбора используемого бота.
 
-| ENV                 | Описание                                          | required | default                           |
-|---------------------|---------------------------------------------------|----------|-----------------------------------|
-| BMQ_TG_API_ID       | Telegram API ID                                   | +        |                                   |
-| BMQ_TG_API_HASH     | Telegram API hash                                 | +        |                                   |
-| BMQ_TG_BOT_TOKEN    | Telegram API token                                | +        |                                   |
-| BMQ_RMQ_DSN         | Строка подключения к RMQ                          | -        | `amqp://user:password@127.0.0.1/` |
-| BMQ_RMQ_ROUTING_KEY | RMQ routing key                                   | -        | `bmq `                            |
-| BMQ_RMQ_QUEUE       | Очередь сообщений                                 | -        | `bmq `                            |
-| BMQ_BOT_TYPE        | Тип используемого бота, пока только Telegram      | -        | `tg `                             |
-| BMQ_APP_MODE        | Режим работы приложения `receiver` или `replayer` | -        | `receiver `                       |
-| BMQ_COMPRESSOR_TYPE | Тип сжатия сообщений, `gzip` или `protobuf`       | -        | `protobuf`                        |
-| BMQ_IDLE_TIMEOUT    | Время простоя главного цикла в секундах           | -        | `1 `                              |
-| BMQ_LOG_LEVEL       | Уровень логирования                               | -        | `INFO `                           |
+| ENV                 | Description                                                   | Required | Default                           |
+|---------------------|---------------------------------------------------------------|----------|-----------------------------------|
+| BMQ_TG_API_ID       | Telegram API ID                                               | ~        |                                   |
+| BMQ_TG_API_HASH     | Telegram API hash                                             | ~        |                                   |
+| BMQ_TG_BOT_TOKEN    | Telegram API token                                            | ~        |                                   |
+| BMQ_JABBER_ID       | Jabber UID                                                    | ~        |                                   |
+|BMQ_JABBER_PASSWORD  | Jabber password                                               | ~        |                                   |
+| BMQ_RMQ_DSN         | Строка подключения к RMQ                                      | -        | `amqp://user:password@127.0.0.1/` |
+| BMQ_RMQ_ROUTING_KEY | RMQ routing key                                               | -        | `bmq `                            |
+| BMQ_RMQ_QUEUE       | Очередь сообщений                                             | -        | `bmq `                            |
+| BMQ_BOT_TYPE        | Тип используемого бота, `tg` для Telegram `jabber` для Jabber | -        | `tg `                             |
+| BMQ_APP_MODE        | Режим работы приложения `receiver` или `replayer`             | -        | `receiver `                       |
+| BMQ_COMPRESSOR_TYPE | Тип сжатия сообщений, `gzip` или `protobuf`                   | -        | `protobuf`                        |
+| BMQ_IDLE_TIMEOUT    | Время простоя главного цикла в секундах                       | -        | `1 `                              |
+| BMQ_LOG_LEVEL       | Уровень логирования                                           | -        | `INFO `                           |
 
 ### Запуск линтера
 `make lint`

@@ -4,6 +4,7 @@ from os import getenv
 
 class BotType(Enum):
     TELEGRAM = 'tg'
+    JABBER = 'jabber'
 
 
 class CompressorType(Enum):

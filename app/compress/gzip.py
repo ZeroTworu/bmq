@@ -1,8 +1,8 @@
 import gzip
 import json
 
-from app.bot.ibot import DtoMessage
 from app.compress.icompress import ICompressor
+from app.im.ibot import DtoMessage
 
 
 class GzipCompressor(ICompressor):

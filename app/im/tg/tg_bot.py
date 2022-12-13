@@ -3,9 +3,9 @@ from typing import TYPE_CHECKING
 from pyrogram import Client
 from pyrogram.handlers import MessageHandler
 
-from app.bot.ibot import DtoMessage, IBot
-from app.bot.tg.filters import filter_not_bot
 from app.config.tg import TG_API_HASH, TG_API_ID, TG_BOT_TOKEN
+from app.im.ibot import DtoMessage, IBot
+from app.im.tg.filters import filter_not_bot
 from app.logger import get_logger
 
 if TYPE_CHECKING:
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
     from pyrogram.types import Message
 
-    from app.bot.ibot import Callback
+    from app.im.ibot import Callback
 
 
 class TgMqBot(IBot, Client):
@@ -46,7 +46,7 @@ class TgMqBot(IBot, Client):
             message.from_user.username,
         )
 
-        dto_message = DtoMessage(uid=message.from_user.id, message=message.text)
+        dto_message = DtoMessage(uid=str(message.from_user.id), message=message.text)
         await self._callback(dto_message)
 
     async def reply(self, message: 'DtoMessage'):

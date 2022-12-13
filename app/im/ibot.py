@@ -5,11 +5,11 @@ from typing import Awaitable, Callable
 
 @dataclass
 class DtoMessage:
-    uid: int
+    uid: str
     message: str
 
     def __str__(self):
-        return f'[(uid={self.uid}) (message={self.message})]'
+        return f'<(uid={self.uid}) (message={self.message})>'
 
 
 Callback = Callable[[DtoMessage], Awaitable]

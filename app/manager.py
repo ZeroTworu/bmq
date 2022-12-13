@@ -5,11 +5,11 @@ from typing import TYPE_CHECKING
 
 import aio_pika
 
-from app.bot import get_bot
 from app.compress import get_compressor
 from app.config.idle import IDLE_TIMEOUT
 from app.config.rmq import RMQ_DSN, RMQ_QUEUE, RMQ_ROUTING_KEY
 from app.config.types import AppMode
+from app.im import get_bot
 from app.logger import censor_amqp, get_logger
 
 if TYPE_CHECKING:
@@ -18,8 +18,8 @@ if TYPE_CHECKING:
     from aio_pika.message import AbstractIncomingMessage
     from aio_pika.robust_connection import AbstractRobustConnection
 
-    from app.bot.ibot import DtoMessage, IBot
     from app.compress.icompress import ICompressor
+    from app.im.ibot import DtoMessage, IBot
 
 
 class Manager:
@@ -72,7 +72,7 @@ class Manager:
         await self._idle()
 
     async def _message_callback(self, message: 'DtoMessage'):
-        self._logger.info('Receive message from bot "%s"', message)
+        self._logger.info('Receive message from im "%s"', message)
         compressed = await self._compressor.compress(message)
 
         channel = await self._rmq_conn.channel()
