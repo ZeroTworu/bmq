@@ -1,16 +1,19 @@
 FROM python:3.10
 
-RUN mkdir /bot
-WORKDIR /bot
+RUN useradd -u 1337 bot --create-home
+USER bot
 
-ADD poetry.lock /bot
-ADD pyproject.toml /bot
+WORKDIR /home/bot
+
+ADD poetry.lock /home/bot
+ADD pyproject.toml /home/bot
+
+ENV PATH="$PATH:/home/bot/.local/bin"
 
 RUN pip3 install --upgrade pip
 RUN pip3 install poetry
-RUN poetry install --no-dev
+RUN poetry install --only main
 
-
-ADD app /bot/app
+ADD app /home/bot/app
 
 CMD ["poetry", "run", "python", "-m", "app"]

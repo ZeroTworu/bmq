@@ -16,13 +16,13 @@ services:
       - rabbit
     environment:
       BMQ_APP_MODE: 'receiver'
-      BMQ_BOT_TYPE: 'tg,jabber'
+      BMQ_BOT_TYPE_USED: 'tg,jabber'
       BMQ_RMQ_DSN: 'amqp://user:password@rabbit/'
       BMQ_LOG_LEVEL: 'INFO'
       BMQ_TG_API_HASH: '***'
       BMQ_TG_API_ID: '***'
       BMQ_TG_BOT_TOKEN: '***'
-      BMQ_JABBER_ID: '***'
+      BMQ_JABBER_UID: '***'
       BMQ_JABBER_PASSWORD: '***'
   replayer:
     image: mq_bot:latest
@@ -30,11 +30,11 @@ services:
       - rabbit
     environment:
       BMQ_APP_MODE: 'replayer'
-      BMQ_BOT_TYPE: 'tg,jabber'
+      BMQ_BOT_TYPE_USED: 'tg,jabber'
       BMQ_RMQ_DSN: 'amqp://user:password@rabbit/'
       BMQ_LOG_LEVEL: 'INFO'
       BMQ_TG_API_HASH: '***'
       BMQ_TG_API_ID: '***'
       BMQ_TG_BOT_TOKEN: '***'
-      BMQ_JABBER_ID: '***'
+      BMQ_JABBER_UID: '***'
       BMQ_JABBER_PASSWORD: '***'
