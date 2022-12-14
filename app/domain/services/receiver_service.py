@@ -11,13 +11,15 @@ if TYPE_CHECKING:
 class ReceiverService(IService):
 
     async def start(self):
+        await super().start()
+
         self._logger.info('Starting receiver')
 
         for bot in self._bots.values():
             await bot.build()
             bot.register_message_callback(self._message_callback)
 
-        self._logger.info('Receiver started')
+        self._logger.info('Service Receiver started')
 
     async def _message_callback(self, message: 'DtoMessage'):
         self._logger.info('Receive message from im "%s"', message)

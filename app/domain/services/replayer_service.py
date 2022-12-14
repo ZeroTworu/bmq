@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 class ReplayerService(IService):
 
     async def start(self):
-        self._logger.info('Starting replayer')
+        await super().start()
 
         channel = await self._rmq_conn.channel()
         await channel.set_qos(prefetch_count=100)
@@ -20,7 +20,7 @@ class ReplayerService(IService):
             queue = await channel.declare_queue(f'bmq_{bot.str_type}', auto_delete=True)
             await queue.consume(self._process_message)
 
-        self._logger.info('Replayer started')
+        self._logger.info('Service Replayer started')
 
     async def _process_message(self, message: 'AbstractIncomingMessage'):
         self._logger.debug('Receive message from RMQ %s', message)

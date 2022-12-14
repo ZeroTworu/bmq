@@ -6,7 +6,7 @@ from aioxmpp import (
     PresenceState, make_security_layer,
 )
 
-from app.config.jabber import JABBER_UID, JABBER_PASSWORD
+from app.config.jabber import JABBER_PASSWORD, JABBER_UID
 from app.config.types import BotType
 from app.domain.logger import get_logger
 from app.im.ibot import DtoMessage, IBot
@@ -38,8 +38,12 @@ class JabberBot(PresenceManagedClient, IBot):
         )
 
     def _pre_receive(self, message: 'Message'):
+
+        if message.type_ != MessageType.CHAT or len(message.body.values()) == 0:
+            return
+
         jid = f'{message.from_.localpart}@{message.from_.domain}'
-        self._logger.debug('Received message from %s', jid)
+        self._logger.debug('Received message from %s, message %s', jid, message)
 
         msg = DtoMessage(
             uid=jid,
