@@ -9,10 +9,11 @@ from aioxmpp import (
 from app.config.jabber import JABBER_PASSWORD, JABBER_UID
 from app.config.types import BotType
 from app.domain.logger import get_logger
-from app.im.ibot import DtoMessage, IBot
+from app.im.dto import DtoMessage
+from app.im.ibot import IBot
+from app.im.jabber.dispatcher import AsyncMessageDispatcher
 
 if TYPE_CHECKING:
-    from asyncio import AbstractEventLoop
     from logging import Logger
 
     from app.im.ibot import Callback
@@ -21,23 +22,24 @@ if TYPE_CHECKING:
 class JabberBot(PresenceManagedClient, IBot):
     _callback: 'Callback' = None
     _logger: 'Logger' = None
-    _loop: 'AbstractEventLoop' = None
     _type: 'BotType' = BotType.JABBER
+    _message_dispatcher: 'AsyncMessageDispatcher' = None
 
     def __init__(self):
         self._logger = get_logger('jabber-core')
 
         super().__init__(JID.fromstr(JABBER_UID), make_security_layer(JABBER_PASSWORD))
+        self._message_dispatcher = self.summon(AsyncMessageDispatcher)
 
     def register_message_callback(self, callback: 'Callback'):
         self._callback = callback
-        self.stream.register_message_callback(
-            None,
-            None,
-            self._pre_receive,
+
+        self._message_dispatcher.register_callback(
+            MessageType.CHAT,
+            self._pre_receive
         )
 
-    def _pre_receive(self, message: 'Message'):
+    async def _pre_receive(self, message: 'Message'):
 
         if message.type_ != MessageType.CHAT or len(message.body.values()) == 0:
             return
@@ -51,7 +53,7 @@ class JabberBot(PresenceManagedClient, IBot):
             bot_type=self._type,
         )
 
-        self._loop.create_task(self._callback(msg))
+        await self._callback(msg)
 
     async def reply(self, message: 'DtoMessage'):
         msg = Message(
@@ -62,7 +64,6 @@ class JabberBot(PresenceManagedClient, IBot):
         await self.send(msg)
 
     async def build(self):
-        self._loop = get_running_loop()
         self.start()
         self.set_presence(
             PresenceState(available=True, show=PresenceShow.CHAT),

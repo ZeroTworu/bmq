@@ -6,7 +6,8 @@ from pyrogram.handlers import MessageHandler
 from app.config.tg import TG_API_HASH, TG_API_ID, TG_BOT_TOKEN
 from app.config.types import BotType
 from app.domain.logger import get_logger
-from app.im.ibot import DtoMessage, IBot
+from app.im.dto import DtoMessage
+from app.im.ibot import IBot
 from app.im.tg.filters import filter_not_bot
 
 if TYPE_CHECKING:

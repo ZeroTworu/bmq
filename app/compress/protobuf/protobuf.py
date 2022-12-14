@@ -1,6 +1,6 @@
 from app.compress.icompress import ICompressor
 from app.compress.protobuf.proto import message_pb2 as pb_message
-from app.im.ibot import DtoMessage
+from app.im.dto import DtoMessage
 
 
 class ProtobufCompressor(ICompressor):

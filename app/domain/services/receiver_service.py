@@ -5,7 +5,7 @@ from aio_pika import Message
 from app.domain.services.iservice import IService
 
 if TYPE_CHECKING:
-    from app.im.ibot import DtoMessage
+    from app.im.dto import DtoMessage
 
 
 class ReceiverService(IService):
