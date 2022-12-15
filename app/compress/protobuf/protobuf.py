@@ -5,6 +5,8 @@ from app.im.dto import DtoMessage
 
 class ProtobufCompressor(ICompressor):
 
+    _name: str = 'Protobuf Compressor'
+
     async def compress(self, message: 'DtoMessage') -> bytes:
         msg = pb_message.Message()
         msg.uid = message.uid

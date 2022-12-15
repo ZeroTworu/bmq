@@ -3,7 +3,10 @@
 Echo microservice multi protocol bot.
 
 Состоит из двух сервисов: `receiver` и `replayer`, связь между сервисами осуществляется через RMQ.
+
 Поддерживает одновременную работу через `Telegram` и `Jabber`.
+
+Поддерживает две шины для обмена данными между сервисами - `RabbitMQ` и `Redis`.
 
 #### `Receiver`
 
@@ -38,19 +41,21 @@ Echo microservice multi protocol bot.
 ### Описание переменных окружения
 * `~` - означает что переменная должна быть заполнена в зависимости от выбора используемых ботов.
 
-| ENV                 | Description                                                               | Required | Default                           |
-|---------------------|---------------------------------------------------------------------------|----------|-----------------------------------|
-| BMQ_TG_API_ID       | Telegram API ID                                                           | ~        |                                   |
-| BMQ_TG_API_HASH     | Telegram API hash                                                         | ~        |                                   |
-| BMQ_TG_BOT_TOKEN    | Telegram API token                                                        | ~        |                                   |
-| BMQ_JABBER_UID      | Jabber UID                                                                | ~        |                                   |
-| BMQ_JABBER_PASSWORD | Jabber password                                                           | ~        |                                   |
-| BMQ_RMQ_DSN         | Строка подключения к RMQ                                                  | -        | `amqp://user:password@127.0.0.1/` |
-| BMQ_BOT_TYPE_USED   | Тип используемых ботов, через `,`, `tg` для Telegram `jabber` для Jabber  | -        | `tg,jabber`                       |
-| BMQ_APP_MODE        | Режим работы приложения `receiver` или `replayer`                         | -        | `receiver `                       |
-| BMQ_COMPRESSOR_TYPE | Тип сжатия сообщений, `gzip` или `protobuf`                               | -        | `protobuf`                        |
-| BMQ_IDLE_TIMEOUT    | Время простоя главного цикла в секундах                                   | -        | `1 `                              |
-| BMQ_LOG_LEVEL       | Уровень логирования                                                       | -        | `INFO `                           |
+| ENV                 | Description                                                                        | Required | Default                           |
+|---------------------|------------------------------------------------------------------------------------|----------|-----------------------------------|
+| BMQ_TG_API_ID       | Telegram API ID                                                                    | ~        |                                   |
+| BMQ_TG_API_HASH     | Telegram API hash                                                                  | ~        |                                   |
+| BMQ_TG_BOT_TOKEN    | Telegram API token                                                                 | ~        |                                   |
+| BMQ_JABBER_UID      | Jabber UID                                                                         | ~        |                                   |
+| BMQ_JABBER_PASSWORD | Jabber password                                                                    | ~        |                                   |
+| BMQ_RMQ_DSN         | Строка подключения к RMQ                                                           | -        | `amqp://user:password@127.0.0.1/` |
+| BMQ_REDIS_DSN       | Строка подключения к Redis                                                         | -        | `redis://localhost/`              |
+| BMQ_BOT_TYPE_USED   | Тип используемых ботов, через `,`, `tg` для Telegram `jabber` для Jabber           | -        | `tg,jabber`                       |
+| BMQ_APP_MODE        | Режим работы приложения `receiver` или `replayer`                                  | -        | `receiver `                       |
+| BMQ_COMPRESSOR_TYPE | Тип сжатия сообщений, `gzip` или `protobuf`                                        | -        | `protobuf`                        |
+| BMQ_IDLE_TIMEOUT    | Время простоя главного цикла в секундах                                            | -        | `1`                               |
+| BMQ_LOG_LEVEL       | Уровень логирования                                                                | -        | `INFO`                            |
+| BMQ_BUS_TYPE        | Тип шины обмена данными `rmq` или `redis`. `rmq` - для RabbitMQ, `redis` для Redis | -        | `rmq`                             |
 
 ### Запуск линтера
 `make lint`

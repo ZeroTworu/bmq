@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
 
+from app._types import CompressorType
 from app.compress.gzip import GzipCompressor
 from app.compress.protobuf.protobuf import ProtobufCompressor
-from app.config.types import COMPRESSOR_TYPE, CompressorType
+from app.config.app import COMPRESSOR_TYPE
 
 if TYPE_CHECKING:
     from app.compress.icompress import ICompressor

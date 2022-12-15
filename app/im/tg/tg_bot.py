@@ -3,24 +3,24 @@ from typing import TYPE_CHECKING
 from pyrogram import Client
 from pyrogram.handlers import MessageHandler
 
+from app._types import BotType
 from app.config.tg import TG_API_HASH, TG_API_ID, TG_BOT_TOKEN
-from app.config.types import BotType
-from app.domain.logger import get_logger
 from app.im.dto import DtoMessage
 from app.im.ibot import IBot
 from app.im.tg.filters import filter_not_bot
+from app.logger import get_logger
 
 if TYPE_CHECKING:
     from logging import Logger
 
     from pyrogram.types import Message
 
-    from app.im.ibot import Callback
+    from app._types import MessageCallback
 
 
 class TelegramBot(IBot, Client):
     _type: 'BotType' = BotType.TELEGRAM
-    _callback: 'Callback' = None
+    _callback: 'MessageCallback' = None
     _logger: 'Logger' = None
 
     def __init__(self):
@@ -35,7 +35,7 @@ class TelegramBot(IBot, Client):
             bot_token=TG_BOT_TOKEN,
         )
 
-    def register_message_callback(self, cb: 'Callback'):
+    def register_message_callback(self, cb: 'MessageCallback'):
         self._callback = cb
         self.add_handler(MessageHandler(self._pre_receive, filters=filter_not_bot))
         self._logger.debug('Registered callback %s', cb)

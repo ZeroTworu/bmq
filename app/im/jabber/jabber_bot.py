@@ -1,4 +1,3 @@
-from asyncio import get_running_loop
 from typing import TYPE_CHECKING
 
 from aioxmpp import (
@@ -6,21 +5,21 @@ from aioxmpp import (
     PresenceState, make_security_layer,
 )
 
+from app._types import BotType
 from app.config.jabber import JABBER_PASSWORD, JABBER_UID
-from app.config.types import BotType
-from app.domain.logger import get_logger
 from app.im.dto import DtoMessage
 from app.im.ibot import IBot
 from app.im.jabber.dispatcher import AsyncMessageDispatcher
+from app.logger import get_logger
 
 if TYPE_CHECKING:
     from logging import Logger
 
-    from app.im.ibot import Callback
+    from app._types import MessageCallback
 
 
 class JabberBot(PresenceManagedClient, IBot):
-    _callback: 'Callback' = None
+    _callback: 'MessageCallback' = None
     _logger: 'Logger' = None
     _type: 'BotType' = BotType.JABBER
     _message_dispatcher: 'AsyncMessageDispatcher' = None
@@ -31,7 +30,7 @@ class JabberBot(PresenceManagedClient, IBot):
         super().__init__(JID.fromstr(JABBER_UID), make_security_layer(JABBER_PASSWORD))
         self._message_dispatcher = self.summon(AsyncMessageDispatcher)
 
-    def register_message_callback(self, callback: 'Callback'):
+    def register_message_callback(self, callback: 'MessageCallback'):
         self._callback = callback
 
         self._message_dispatcher.register_callback(

@@ -6,6 +6,7 @@ from app.im.dto import DtoMessage
 
 
 class GzipCompressor(ICompressor):
+    _name: str = 'Gzip Compressor'
 
     async def compress(self, message: 'DtoMessage') -> bytes:
         dump = json.dumps({'uid': message.uid, 'message': message.message})

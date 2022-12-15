@@ -1,6 +1,6 @@
 from asyncio import events
 
-from app.config.types import APP_MODE
+from app.config.app import APP_MODE
 from app.domain.manager import Manager
 
 

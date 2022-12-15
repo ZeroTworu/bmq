@@ -10,8 +10,9 @@ python = "^3.10"
 Pyrogram = "^2.0.64"
 TgCrypto = "^1.2.5"
 aio-pika = "^8.2.5"
-protobuf = "^4.21.10"
+protobuf = "^4.21.12"
 aioxmpp = "^0.13.2"
+aioredis = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^6.0.0"

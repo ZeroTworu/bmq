@@ -10,6 +10,10 @@ services:
       - 15672:15672
     volumes:
       - ./data/rabbitmq:/var/lib/rabbitmq
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
   receiver:
     image: mq_bot:latest
     depends_on:
@@ -18,6 +22,7 @@ services:
       BMQ_APP_MODE: 'receiver'
       BMQ_BOT_TYPE_USED: 'tg,jabber'
       BMQ_RMQ_DSN: 'amqp://user:password@rabbit/'
+      BMQ_REDIS_DSN: 'redis://redis/'
       BMQ_LOG_LEVEL: 'INFO'
       BMQ_TG_API_HASH: '***'
       BMQ_TG_API_ID: '***'
@@ -32,6 +37,7 @@ services:
       BMQ_APP_MODE: 'replayer'
       BMQ_BOT_TYPE_USED: 'tg,jabber'
       BMQ_RMQ_DSN: 'amqp://user:password@rabbit/'
+      BMQ_REDIS_DSN: 'redis://redis/'
       BMQ_LOG_LEVEL: 'INFO'
       BMQ_TG_API_HASH: '***'
       BMQ_TG_API_ID: '***'

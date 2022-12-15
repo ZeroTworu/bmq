@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
 
-from aio_pika import Message
-
 from app.domain.services.iservice import IService
 
 if TYPE_CHECKING:
@@ -22,14 +20,10 @@ class ReceiverService(IService):
         self._logger.info('Service Receiver started')
 
     async def _message_callback(self, message: 'DtoMessage'):
+        queue_name = f'bmq_{message.bot_type.value}'
         self._logger.info('Receive message from im "%s"', message)
+
         compressed = await self._compressor.compress(message)
+        await self._message_bus.publish(queue_name, compressed)
 
-        channel = await self._rmq_conn.channel()
-
-        await channel.default_exchange.publish(
-            Message(body=compressed),
-            routing_key=f'bmq_{message.bot_type.value}',
-        )
-
-        self._logger.info('Message %s published', message)
+        self._logger.info('Message %s published to %s', message, queue_name)

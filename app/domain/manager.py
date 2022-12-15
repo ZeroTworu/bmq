@@ -1,34 +1,31 @@
-import asyncio
 import signal
+from asyncio import sleep as async_sleep
 from signal import SIGABRT, SIGINT, SIGTERM, signal as signal_fn
 from typing import TYPE_CHECKING
 
-from app.compress import get_compressor
+from app._types import AppType
 from app.config.idle import IDLE_TIMEOUT
-from app.config.types import AppMode
-from app.domain.logger import get_logger
-from app.domain.services.receiver_service import ReceiverService
-from app.domain.services.replayer_service import ReplayerService
+from app.domain.services import ReceiverService, ReplayerService
+from app.logger import get_logger
 
 if TYPE_CHECKING:
     from logging import Logger
 
-    from app.domain.services.iservice import IService
+    from app.domain.services import IService
 
 
 class Manager:
 
     _logger: 'Logger' = None
-    _mode: 'AppMode' = None
+    _mode: 'AppType' = None
     _working: bool = False
     _service: 'IService' = None
 
-    def __init__(self, mode: 'AppMode'):
+    def __init__(self, mode: 'AppType'):
         self._logger = get_logger('manage')
         self._logger.info('Starting...')
 
         self._mode = mode
-        self._compressor = get_compressor()
 
         for s in (SIGINT, SIGTERM, SIGABRT):
             signal_fn(s, self.stop)
@@ -46,9 +43,9 @@ class Manager:
         self._working = True
 
         match self._mode:
-            case AppMode.RECEIVER:
+            case AppType.RECEIVER:
                 self._service = ReceiverService('receiver')
-            case AppMode.REPLAYER:
+            case AppType.REPLAYER:
                 self._service = ReplayerService('replayer')
             case _:
                 raise ValueError(f'Unknown service {self._mode}')
@@ -58,7 +55,7 @@ class Manager:
 
     async def _idle(self):
         while self._working:
-            await asyncio.sleep(IDLE_TIMEOUT)
+            await async_sleep(IDLE_TIMEOUT)
 
         await self._service.stop()
         self._logger.info('Exit')

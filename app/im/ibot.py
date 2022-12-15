@@ -4,18 +4,14 @@ from typing import TYPE_CHECKING
 from app.im.dto import DtoMessage
 
 if TYPE_CHECKING:
-    from typing import Awaitable, Callable
-
-    from app.config.types import BotType
-
-    Callback = Callable[[DtoMessage], Awaitable]
+    from app._types import BotType, MessageCallback
 
 
 class IBot(metaclass=ABCMeta):
     _type: 'BotType'
 
     @abstractmethod
-    def register_message_callback(self, callback: 'Callback'):
+    def register_message_callback(self, callback: 'MessageCallback'):
         pass
 
     @abstractmethod

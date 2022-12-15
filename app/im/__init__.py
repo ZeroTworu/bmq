@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
 
-from app.config.types import BOT_TYPE_USED, BotType
+from app.config.app import BOT_TYPE_USED
 from app.im.jabber.jabber_bot import JabberBot
 
+from .._types import BotType
 from .tg.tg_bot import TelegramBot
 
 if TYPE_CHECKING:
