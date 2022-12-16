@@ -1,13 +1,21 @@
+from dataclasses import dataclass
 from enum import Enum
-from typing import TYPE_CHECKING
+from typing import Awaitable, Callable
 
-if TYPE_CHECKING:
-    from typing import Awaitable, Callable
 
-    from app.im.dto import DtoMessage
+@dataclass
+class DtoMessage:
+    uid: str
+    message: str
+    bot_type: 'BotType|None' = None
 
-    MessageCallback = Callable[[DtoMessage], Awaitable]
-    BusCallback = Callable[[bytes], Awaitable]
+    def __str__(self):
+        return f'<(uid={self.uid}) (message={self.message}) (bot_type={self.bot_type})>'
+
+
+MessageCallback = Callable[[DtoMessage], Awaitable]
+
+BusCallback = Callable[[bytes], Awaitable]
 
 
 class BusType(Enum):

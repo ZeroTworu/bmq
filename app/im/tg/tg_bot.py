@@ -3,9 +3,8 @@ from typing import TYPE_CHECKING
 from pyrogram import Client
 from pyrogram.handlers import MessageHandler
 
-from app._types import BotType
+from app._types import BotType, DtoMessage
 from app.config.tg import TG_API_HASH, TG_API_ID, TG_BOT_TOKEN
-from app.im.dto import DtoMessage
 from app.im.ibot import IBot
 from app.im.tg.filters import filter_not_bot
 from app.logger import get_logger

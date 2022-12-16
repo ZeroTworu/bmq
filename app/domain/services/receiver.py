@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from app.domain.services.iservice import IService
 
 if TYPE_CHECKING:
-    from app.im.dto import DtoMessage
+    from app._types import DtoMessage
 
 
 class ReceiverService(IService):

@@ -1,10 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from typing import TYPE_CHECKING
 
-from app.im.dto import DtoMessage
-
 if TYPE_CHECKING:
-    from app._types import BotType, MessageCallback
+    from app._types import BotType, DtoMessage, MessageCallback
 
 
 class IBot(metaclass=ABCMeta):

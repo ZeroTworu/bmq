@@ -10,11 +10,11 @@ Echo microservice multi protocol bot.
 
 #### `Receiver`
 
-Сервис принимающий сообщения от пользователя.
+Сервис принимающий сообщения от пользователя и отправляющий сообщение в шину данных.
 
 #### `Replayer`
 
-Сервис принимающий сообщения от `receiver` и отправляющий их обратно пользователю.
+Сервис принимающий сообщения из шины данных и отправляющий их обратно пользователю.
 
 ### Requirements
 
@@ -26,7 +26,7 @@ Echo microservice multi protocol bot.
 Запускает инфраструктуру, собирает приложение, поднимает сервисы `receiver` и `replayer`.
 
 1. Скопировать файл `docker/docker-compose.app.yaml.example` в `docker/docker-compose.app.yaml`.
-2. Отредактировать в нём параметры необходимые для подключения, согласно таблице ниже.
+2. Отредактировать в нём параметры необходимые для подключения, согласно [таблице](#Описание-переменных-окружения) ниже.
 3. Выполнить `make app`
 
 ## Локальный запуск вне контейнера.
@@ -34,7 +34,7 @@ Echo microservice multi protocol bot.
 ### Установка зависимостей
 
 1. `make install-deps`.
-2. Выставить переменные окружения согласно таблице ниже.
+2. Выставить переменные окружения согласно [таблице](#Описание-переменных-окружения) ниже.
 3. `make infra` - поднятие RMQ.
 4. `make local` или `poetry run python -m app`.
 
@@ -60,5 +60,31 @@ Echo microservice multi protocol bot.
 ### Запуск линтера
 `make lint`
 
-### Генерация `proto` файлов
+### Генерация protobuf
 `make proto`
+
+### Структура проекта
+1. `app.bus` - Шина обмена данными между микросервисами.
+   1. `app.bus.IBus` - Интерфейс шины обмена данными.
+   2. `app.bus.RabbitMqBus` - Реализация шины, для обмена через `RabbitMQ`
+   3. `app.bus.RedisBus` - Реализация шины, для обмена через `Redis`
+
+2. `app.compress` - Реализация сжатия сообщений.
+   1. `app.compress.ICompressor` - Интерфейс описывающий компрессор сообщений.
+   2. `capp.ompress.GzipCompressor` - Реализация сжатия через `Gzip`. 
+   Сжимает `JSON` строку в которую преобразуется `_types.DtoMessage`
+   3. `app.compress.ProtobufCompressor` - Реализация сжатия через `protobuf`.
+   Генерится из `proto.message.proto` через `make proto`
+
+3. `app.config` - Конфигурация приложения загружаемая из `ENV`
+4. `app.domain` - Основное приложение.
+   1. `app.domain.manager.Manager` - Менеджер микросоервисов, отвечает за запуск в зависимости от `config.app.APP_MODE`, останов, и main Idle.
+   2. `app.domain,services.IService` - Абстрактный класс, описывающий сервис.
+   3. `app.domain.servicers.ReceiverService` - Сервис принимающий сообщения из im и передающий их в `replayer`
+   4. `app.domain.servicers.ReplayerService` - Принимает сообщения от `receiver` через шину, и отправляет обратно в im.
+5. `app.im` - Реализация ботов для im.
+   1. `app.im.IBot` - Интерфейс бота, бот должен уметь регистрировать callback на сообщение `register_message_callback` и
+   отвечать `reply`. Методы `build` и `destroy` предназначены для инициализации / завершения, и имеют такие названия, что бы не пересекаться со стандартными `start` / `stop`.
+   2. `app.im.TelegramBot` - Реализация работы с Telegram im.
+   3. `app.im.JabberBot` - Реализация работы с Jabber im.
+6. `app._types` - Описание кастомных типов прилежения, `_` в названии, нужна для корректной рабоды debug в Pycharm.

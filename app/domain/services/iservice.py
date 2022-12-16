@@ -1,4 +1,3 @@
-from abc import ABCMeta
 from typing import TYPE_CHECKING
 
 from app.bus import get_bus
@@ -16,7 +15,7 @@ if TYPE_CHECKING:
     from app.im import IBot
 
 
-class IService(metaclass=ABCMeta):
+class IService:
 
     _bots: 'Dict[BotType, IBot]' = {}
     _logger: 'Logger' = None

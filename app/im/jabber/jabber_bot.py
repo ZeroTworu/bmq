@@ -5,9 +5,8 @@ from aioxmpp import (
     PresenceState, make_security_layer,
 )
 
-from app._types import BotType
+from app._types import BotType, DtoMessage
 from app.config.jabber import JABBER_PASSWORD, JABBER_UID
-from app.im.dto import DtoMessage
 from app.im.ibot import IBot
 from app.im.jabber.dispatcher import AsyncMessageDispatcher
 from app.logger import get_logger

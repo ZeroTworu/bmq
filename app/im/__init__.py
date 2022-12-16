@@ -1,15 +1,14 @@
 from typing import TYPE_CHECKING
 
+from app._types import BotType
 from app.config.app import BOT_TYPE_USED
-from app.im.jabber.jabber_bot import JabberBot
 
-from .._types import BotType
+from .ibot import IBot
+from .jabber.jabber_bot import JabberBot
 from .tg.tg_bot import TelegramBot
 
 if TYPE_CHECKING:
     from typing import Dict, List
-
-    from .ibot import IBot
 
 
 def get_bots() -> 'Dict[BotType,IBot]':

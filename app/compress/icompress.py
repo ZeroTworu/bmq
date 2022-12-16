@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from app.im.dto import DtoMessage
+    from app._types import DtoMessage
 
 
 class ICompressor(metaclass=ABCMeta):

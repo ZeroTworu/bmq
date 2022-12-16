@@ -40,6 +40,7 @@ class RabbitMqBus(IBus):
             await self.connect()
 
     async def close(self):
+        await self._channel.close()
         await self._rmq_conn.close()
 
     async def register_callback(self, queue_name: str, callback: 'BusCallback'):

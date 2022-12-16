@@ -28,8 +28,7 @@ class ReplayerService(IService):
 
         self._logger.info('Decoded message from %s %s', self._message_bus.name, dto_message)
 
-        bot = self._bots.get(dto_message.bot_type)
-        if bot is None:
+        if (bot := self._bots.get(dto_message.bot_type)) is None:
             self._logger.error('Bot "%s" not registered', bot_str_type)
             return
 

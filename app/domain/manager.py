@@ -4,7 +4,7 @@ from signal import SIGABRT, SIGINT, SIGTERM, signal as signal_fn
 from typing import TYPE_CHECKING
 
 from app._types import AppType
-from app.config.idle import IDLE_TIMEOUT
+from app.config.app import IDLE_TIMEOUT
 from app.domain.services import ReceiverService, ReplayerService
 from app.logger import get_logger
 
