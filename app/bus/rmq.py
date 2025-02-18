@@ -18,15 +18,13 @@ if TYPE_CHECKING:
 
 class RabbitMqBus(IBus):
 
-    _amqp_wait_timeout: int = 5
-    _rmq_conn: 'AbstractRobustConnection' = None
-
-    _channel: 'AbstractRobustChannel' = None
-
-    _name: str = 'RabbitMQ Message Bus'
+    _amqp_wait_timeout: 'int' = 5
+    _name: 'str' = 'RabbitMQ Message Bus'
 
     def __init__(self):
         super().__init__('rmq-bus')
+        self._rmq_conn: 'AbstractRobustConnection|None' = None
+        self._channel: 'AbstractRobustChannel|None' = None
 
     async def connect(self):
         try:

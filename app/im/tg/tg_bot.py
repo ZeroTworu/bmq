@@ -19,12 +19,11 @@ if TYPE_CHECKING:
 
 class TelegramBot(IBot, Client):
     _type: 'BotType' = BotType.TELEGRAM
-    _callback: 'MessageCallback' = None
-    _logger: 'Logger' = None
 
     def __init__(self):
 
-        self._logger = get_logger('tg-core')
+        self._logger: 'Logger' = get_logger('tg-core')
+        self._callback: 'MessageCallback|None' = None
 
         super().__init__(
             name='MqBot',

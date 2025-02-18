@@ -4,11 +4,10 @@ from typing import TYPE_CHECKING
 from app.logger import get_logger
 
 if TYPE_CHECKING:
-    if TYPE_CHECKING:
-        from logging import Logger
-        from typing import Dict
+    from logging import Logger
+    from typing import Dict
 
-        from app._types import BusCallback
+    from app._types import BusCallback
 
 
 class IBus(metaclass=ABCMeta):

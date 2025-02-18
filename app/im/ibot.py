@@ -25,5 +25,5 @@ class IBot(metaclass=ABCMeta):
         pass
 
     @property
-    def str_type(self) -> str:
+    def str_type(self) -> 'str':
         return str(self._type.value)

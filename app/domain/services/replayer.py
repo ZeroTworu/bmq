@@ -20,7 +20,7 @@ class ReplayerService(IService):
 
         self._logger.info('Service Replayer started')
 
-    async def _process_message(self, message: bytes, bot_str_type: str):
+    async def _process_message(self, message: 'bytes', bot_str_type: 'str'):
         self._logger.debug('Receive message from RMQ %s', message)
 
         dto_message = await self._compressor.decompress(message)

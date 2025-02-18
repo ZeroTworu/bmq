@@ -6,14 +6,14 @@ if TYPE_CHECKING:
 
 
 class ICompressor(metaclass=ABCMeta):
-    _name: str = 'Abstract Compressor'
+    _name: 'str' = 'Abstract Compressor'
 
     @abstractmethod
-    async def compress(self, message: 'DtoMessage') -> bytes:
+    async def compress(self, message: 'DtoMessage') -> 'bytes':
         pass
 
     @abstractmethod
-    async def decompress(self, compressed: bytes) -> 'DtoMessage':
+    async def decompress(self, compressed: 'bytes') -> 'DtoMessage':
         pass
 
     @property

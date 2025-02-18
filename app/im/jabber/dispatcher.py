@@ -18,7 +18,7 @@ class AsyncMessageDispatcher(Service):
     def local_jid(self):
         return self.client.local_jid
 
-    @depsignal(StanzaStream, "on_message_received", defer=True)
+    @depsignal(StanzaStream, 'on_message_received', defer=True)
     async def _feed(self, stanza):
 
         try:
@@ -29,8 +29,6 @@ class AsyncMessageDispatcher(Service):
     def register_callback(self, type_: 'MessageType', cb: 'PreReceiveCallback'):
 
         if type_ in self._map:
-            raise ValueError(
-                "only one listener allowed per matcher"
-            )
+            raise ValueError('only one listener allowed per matcher')
 
         self._map[type_] = cb

@@ -33,7 +33,7 @@ class Manager:
     def stop(self, signum, __):
         signal_name = {
             k: v for v, k in signal.__dict__.items()
-            if v.startswith("SIG") and not v.startswith("SIG_")
+            if v.startswith('SIG') and not v.startswith('SIG_')
         }[signum]
         self._logger.info('Stop signal received (%s). Exiting...', signal_name)
 

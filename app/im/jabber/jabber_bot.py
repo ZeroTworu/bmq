@@ -18,16 +18,14 @@ if TYPE_CHECKING:
 
 
 class JabberBot(PresenceManagedClient, IBot):
-    _callback: 'MessageCallback' = None
-    _logger: 'Logger' = None
     _type: 'BotType' = BotType.JABBER
-    _message_dispatcher: 'AsyncMessageDispatcher' = None
 
     def __init__(self):
-        self._logger = get_logger('jabber-core')
+        self._logger: 'Logger' = get_logger('jabber-core')
+        self._callback: 'MessageCallback|None' = None
 
         super().__init__(JID.fromstr(JABBER_UID), make_security_layer(JABBER_PASSWORD))
-        self._message_dispatcher = self.summon(AsyncMessageDispatcher)
+        self._message_dispatcher: 'AsyncMessageDispatcher' = self.summon(AsyncMessageDispatcher)
 
     def register_message_callback(self, callback: 'MessageCallback'):
         self._callback = callback
@@ -39,7 +37,7 @@ class JabberBot(PresenceManagedClient, IBot):
 
     async def _pre_receive(self, message: 'Message'):
 
-        if message.type_ != MessageType.CHAT or len(message.body.values()) == 0:
+        if message.type_ != MessageType.CHAT or bool(message.body.values()):
             return
 
         jid = f'{message.from_.localpart}@{message.from_.domain}'
